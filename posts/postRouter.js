@@ -1,6 +1,6 @@
 const express = require("express");
 
-const Posts = require("./postDb");
+const PostDb = require("./postDb");
 
 const router = express.Router();
 
@@ -16,7 +16,7 @@ router.put("/:id", (req, res) => {});
 
 function validatePostId(req, res, next) {
   const { id } = req.params;
-  Posts.getById(id)
+  PostDb.getById(id)
     .then(post => {
       if (post) {
         req.post = post;
