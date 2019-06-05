@@ -1,22 +1,98 @@
 const express = require("express");
 
 const UserDb = require("./userDb");
+const PostDb = require("../posts/postDb");
 
-const router = express.Router();
+const router = require("express").Router();
 
-router.post("/", (req, res) => {});
+// POST USER - works
+router.post("/", validateUser, async (req, res) => {
+  try {
+    const user = await UserDb.insert(req.body);
+    res.status(201).json(user);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server error adding user" });
+  }
+});
 
-router.post("/:id/posts", (req, res) => {});
+// POST/ADD USER'S POST BY USER ID
+router.post("/:id/posts", validatePost, async (req, res) => {
+  try {
+    const post = PostDb.insert(req.body);
+    res.status(201).json(post);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server error adding post" });
+  }
+});
 
-router.get("/", (req, res) => {});
+// GET USERS - works
+router.get("/", async (req, res) => {
+  try {
+    const users = await UserDb.get(req.query);
+    res.status(200).json(users);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server error retrieving user" });
+  }
+});
 
-router.get("/:id", (req, res) => {});
+// GET USER BY ID - works
+router.get("/:id", validateUserId, async (req, res) => {
+  try {
+    const user = await UserDb.getById(req.params.id);
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server error retrieving User" });
+  }
+});
 
-router.get("/:id/posts", (req, res) => {});
+// GET USER POSTS BY USER ID - works
+router.get("/:id/posts", validateUserId, async (req, res) => {
+  try {
+    const posts = await UserDb.getUserPosts(req.params.id);
+    res.status(200).json(posts);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server error retrieving posts" });
+  }
+});
 
-router.delete("/:id", (req, res) => {});
+// USER DELETE - works
+router.delete("/:id", validateUserId, async (req, res) => {
+  try {
+    const count = await UserDb.remove(req.params.id);
+    if (count > 0) {
+      res.status(200).json({ message: "User DELETED" });
+    } else {
+      res.status(404).json({ message: "User could not be found" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server error removing user" });
+  }
+});
 
-router.put("/:id", (req, res) => {});
+// USER PUT - works
+router.put("/:id", validateUserId, async (req, res) => {
+  try {
+    const user = await UserDb.update(req.params.id, req.body);
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      res.status(404).json({ message: "User could not be found" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server error updating user" });
+  }
+});
 
 //custom middleware
 
@@ -48,7 +124,7 @@ function validateUser(req, res, next) {
 }
 
 function validatePost(req, res, next) {
-  if (req.body && Object.keys(req.body.text).length > 0) {
+  if (req.body.text && Object.keys(req.body.text).length > 0) {
     next();
   } else {
     res

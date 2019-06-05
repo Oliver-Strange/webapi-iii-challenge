@@ -15,7 +15,7 @@ server.use(methodLogger);
 
 // Route Handlers
 server.use("/api/posts", postsRouter);
-server.use("/api/user", userRouter);
+server.use("/api/users", userRouter);
 
 server.get("/", (req, res) => {
   res.send(`<h2>Let's write some middleware!</h2>`);
@@ -24,7 +24,7 @@ server.get("/", (req, res) => {
 //custom middleware
 
 function methodLogger(req, res, next) {
-  console.log(`${req.method} Request. ${Date.getTime()}`);
+  console.log(`${req.method} Request. ${Date.now()}`);
   next();
 }
 
