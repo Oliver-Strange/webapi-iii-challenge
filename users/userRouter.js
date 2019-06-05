@@ -37,7 +37,15 @@ function validateUserId(req, res, next) {
     });
 }
 
-function validateUser(req, res, next) {}
+function validateUser(req, res, next) {
+  if (req.body.name && Object.keys(req.body.name).length > 0) {
+    next();
+  } else {
+    res
+      .status(400)
+      .json({ message: "missing user data; or missing name field" });
+  }
+}
 
 function validatePost(req, res, next) {}
 
