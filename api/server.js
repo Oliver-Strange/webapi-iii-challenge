@@ -1,9 +1,10 @@
+require("dotenv").config();
 const express = require("express");
 const helmet = require("helmet");
 const logger = require("morgan");
 
-const postsRouter = require("./posts/postRouter");
-const userRouter = require("./users/userRouter");
+const postsRouter = require("../posts/postRouter");
+const userRouter = require("../users/userRouter");
 
 const server = express();
 
@@ -18,7 +19,7 @@ server.use("/api/posts", postsRouter);
 server.use("/api/users", userRouter);
 
 server.get("/", (req, res) => {
-  res.send(`<h2>Let's write some middleware!</h2>`);
+  res.send(`<h2>Let's test our api on Heroku!</h2>`);
 });
 
 //custom middleware
