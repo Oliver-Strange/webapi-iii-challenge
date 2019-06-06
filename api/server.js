@@ -19,7 +19,12 @@ server.use("/api/posts", postsRouter);
 server.use("/api/users", userRouter);
 
 server.get("/", (req, res) => {
-  res.send(`<h2>Let's test our api on Heroku!</h2>`);
+  res.send(`
+      <h2>Let's test our api on Heroku!</h2>
+      <p>/api/users - shows list of users</p> 
+      <p>users/id - shows specific user</p> 
+      <p>users/id/posts - shows specific users posts</p>
+  `);
 });
 
 //custom middleware
