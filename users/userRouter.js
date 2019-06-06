@@ -16,7 +16,7 @@ router.post("/", validateUser, async (req, res) => {
   }
 });
 
-// POST/ADD USER'S POST BY USER ID
+// POST/ADD USER'S POST BY USER ID - works with weird response
 router.post("/:id/posts", validatePost, async (req, res) => {
   try {
     const post = PostDb.insert(req.body);
